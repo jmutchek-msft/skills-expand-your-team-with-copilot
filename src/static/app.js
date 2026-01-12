@@ -501,6 +501,28 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Function to share to Twitter
+  function shareToTwitter(activityName, activityDescription, schedule) {
+    const url = window.location.href;
+    const text = `Check out ${activityName} at Mergington High School! ${schedule}`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+    window.open(twitterUrl, '_blank', 'width=600,height=400');
+  }
+
+  // Function to share to Facebook
+  function shareToFacebook() {
+    const url = window.location.href;
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    window.open(facebookUrl, '_blank', 'width=600,height=400');
+  }
+
+  // Function to share to LinkedIn
+  function shareToLinkedIn() {
+    const url = window.location.href;
+    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+    window.open(linkedInUrl, '_blank', 'width=600,height=400');
+  }
+
   // Function to render a single activity card
   function renderActivityCard(name, details) {
     const activityCard = document.createElement("div");
@@ -557,6 +579,17 @@ document.addEventListener("DOMContentLoaded", () => {
         <span class="tooltip-text">Regular meetings at this time throughout the semester</span>
       </p>
       ${capacityIndicator}
+      <div class="social-share-buttons">
+        <button class="share-button twitter-share" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share on Twitter" aria-label="Share ${name} on Twitter">
+          <span class="share-icon" aria-hidden="true">🐦</span>
+        </button>
+        <button class="share-button facebook-share" data-activity="${name}" title="Share on Facebook" aria-label="Share ${name} on Facebook">
+          <span class="share-icon" aria-hidden="true">📘</span>
+        </button>
+        <button class="share-button linkedin-share" data-activity="${name}" title="Share on LinkedIn" aria-label="Share ${name} on LinkedIn">
+          <span class="share-icon" aria-hidden="true">💼</span>
+        </button>
+      </div>
       <div class="participants-list">
         <h5>Current Participants:</h5>
         <ul>
@@ -614,6 +647,35 @@ document.addEventListener("DOMContentLoaded", () => {
           openRegistrationModal(name);
         });
       }
+    }
+
+    // Add event listeners for social share buttons
+    const twitterButton = activityCard.querySelector(".twitter-share");
+    const facebookButton = activityCard.querySelector(".facebook-share");
+    const linkedinButton = activityCard.querySelector(".linkedin-share");
+
+    if (twitterButton) {
+      twitterButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const activityName = e.currentTarget.dataset.activity;
+        const description = e.currentTarget.dataset.description;
+        const schedule = e.currentTarget.dataset.schedule;
+        shareToTwitter(activityName, description, schedule);
+      });
+    }
+
+    if (facebookButton) {
+      facebookButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        shareToFacebook();
+      });
+    }
+
+    if (linkedinButton) {
+      linkedinButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        shareToLinkedIn();
+      });
     }
 
     activitiesList.appendChild(activityCard);
